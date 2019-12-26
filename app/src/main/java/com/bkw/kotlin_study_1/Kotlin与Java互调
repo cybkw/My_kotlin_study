@@ -1,0 +1,96 @@
+/**
+ * 与Java代码互相调用
+ * */
+
+一、语法变化
+1.1 Kotlin的代码可以直接写在文件里面，而不用写在类里面，如：Utils.kt文件。
+而Java代码必须.java后缀文件结尾。
+
+示例，如下Utils.kt文件中的函数或变量都会被编译成 public static 方法名/变量:
+// 默认包名--package com.bkw.kotlin_study_1
+
+//自己指定包名-- package demo
+
+class study2 { //类名
+
+    //echo函数
+    fun echo(name: String) {
+        println("$name")
+    }
+}
+
+1.2 在Java中调用Kotlin
+public class Main {
+    public static void main(String[] args){
+        //UtilsKt.echo("哈哈哈哈哈"); //错误
+
+        //new com.bkw.kotlin_study_1.study2().echo("哈哈"); //第一种方式 ：默认包名引用，正确
+
+        new demo.study2().echo("第二方式 ");   //第二种方式：指定包名引用，正确
+
+        //第三种方式
+        demo.study2 study2= new demo.study2();
+        study2.echo("第三种方式");
+    }
+}
+
+1.3 在Kotlin中调用Java
+/**
+ * main函数==等同于java中的 main方法
+ * */
+fun main(args: Array<String>) {
+
+    //在kotlin中调用java，可以使用var,也可以使用val,推荐val
+    val m=Main();
+    m.forKotlin("调用") //Main.java的forKotlin方法被调用
+}
+
+1.4 kotlin特殊语法
+如下：
+Kotlin定义一个匿名内部类的写法，在Utils.kt/Study2 类下
+    object Book{
+        fun read(){
+            println("匿名内部类：Book")
+        }
+    }
+
+kotlin调用kotlin匿名内部类：
+Study2.Book.read()
+
+
+在Java中调用kotlin匿名内部类：
+Study2.Book.INSTANCE.read();
+
+
+1.5 传递类参数的方式
+
+java传递给kotlin函数 ：
+在Main.java顶部引入import static demo.UtilsKt.testClass;
+//可直接在java中调用
+testClass(Main.class);
+
+//kotlin中定义的函数testClass
+fun testClass(clazz :Class<Main>){
+    println(clazz.simpleName);
+}
+
+//kotlin中调用Java的class的方式
+testClass(Main::class.java)
+
+
+//Kotlin的Class
+fun testClass(clazz:KClass<KotlinMain>){
+    println(clazz.simpleName);
+}
+
+//kotlin调用KotlinMain.class的方式，不需要后面的.java
+testClass(KotlinMain::class)
+
+//////////////////////////////////////////////////////////////
+二、Kotlin关键字处理
+如：在Java类中有一个in变量
+public static String in="in";
+
+在Kotlin中，in是关键字，使用会有冲突，解决方式如下：
+用两个反引号表示转义
+ println(JavaMain.`in`)

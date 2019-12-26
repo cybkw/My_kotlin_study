@@ -1,0 +1,65 @@
+
+一、类的声明
+注：
+kotlin的类如果没有显示指明父类的话，那么默认父类就是Any,相当于java中的Object。
+Kotlin的类默认是public final的,如果不需要final可以在class前加open关键字。
+
+父类和接口没有先后关系，先写接口再写父类也没关系，如下:
+class MainActivity : View.OnClickListener,AppCompatActivity(){}
+
+/**
+ * 如：Activity
+ * 如果有父类 用冒号 :父类
+ * */
+class MainActivity : AppCompatActivity(),View.OnClickListener{
+    override fun onClick(v: View?) {
+    }
+}
+
+
+
+二、构造函数
+在kotlin中分为主构造函数和次级构造函数。
+
+主构造函数：
+/**
+*如果需要给类添加构造函数，直接在类名后面添加，如下:
+ viewId
+ name
+*/
+class MainActivity(var viewId:Int,var name:String) : AppCompatActivity(),View.OnClickListener{
+
+   init {
+        //init块用于初始化，比如在构造函数中执行一些语句
+        println("构造函数初始化 init")
+    }
+
+    override fun onClick(v: View?) {
+    }
+}
+
+
+次级构造函数：
+如果有多个构造函数，需要显示的声明次级构造函数，如下：
+class TestView : View {
+    constructor(context: Context) : super(context) {
+        println("次级构造函数");
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
+        println("次级构造函数");
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
+        println("次级构造函数");
+    }
+}
+
+次级构造函数必须间接或直接的继承主构造函数或者父类的构造函数。
+
+
+
+
+
+
+

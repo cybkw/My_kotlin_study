@@ -1,0 +1,115 @@
+package course3
+
+/////////////////函数与Lambda闭包知识//////////////////
+
+一、函数的特性语法
+1.1 普通带参数的函数
+fun echo(name:String){
+    println("$name")
+}
+
+1.2 带默认参数值的函数
+fun echo(name :String ="bkw"){
+    println("$name")
+}
+
+//1.3 如果一个函数它的函数体只有一个语句的话，使用以下方式
+fun echo3(name: String) = println("$name")
+
+二、函数嵌套
+类似于内部类，内部函数可以访问外部函数的局部变量。
+一般情况下，不建议使用内部函数，内部函数会降低代码可读性。
+
+用途：
+在某些条件下触发递归的函数，不希望被外部函数访问到的函数。
+fun function() {
+    val str = "hello w"
+
+    fun say(count: Int = 10) {
+        println(str) // 此处可以访问function函数的str
+        if (count > 0) {
+            //满足条件递归执行
+            say(count - 1)
+        }
+    }
+    say()
+}
+
+
+三、扩展函数
+优势：静态给一个类扩展成员方法。
+
+//静态在kt类上添加一个扩展函数
+
+// 类名.函数名(参数) : 函数返回类型 = 函数体（注：如果是函数体单句的话）
+fun Kt.say2(name: String = "bkw"): String = println(name).toString()
+
+//直接就可运行刚扩展的函数
+Kt.say2()
+
+
+在Java中使用扩展函数
+File file = new File("path.iml");
+String s = FilesKt.readText(file, Charsets.UTF_8);
+
+扩展函数的静态分析：
+open关键字与java中的final意思相反。
+kotlin在声明一个类时会默认添加一个final修饰符。
+
+open class Animal {
+    open fun name() {
+        println("animal")
+    }
+
+    fun printName(animal: Animal) {
+        animal.name()
+    }
+}
+
+
+class Dog : Animal() {
+
+    override fun name() {
+        println("Dog")
+    }
+}
+
+fun main(args: Array<String>) {
+    Dog().printName(Dog())
+}
+
+以上代码编译完后的样子，如下：
+public static final String name(Animal animal){
+    return "animal"
+}
+public static final String name(Dog dog){
+    return "dog"
+}
+
+//注意：编译以后，扩展函数会多加一个参数，这个参数是扩展的那个类的对象
+public static final void printName(Animal r,Animal a){
+    String str=name(a);
+    System.out.println(str);
+}
+
+public static final void main(String[] args){
+    printName((Animal)new Dog(),(Animal) new Dog());
+}
+
+3.1 扩展属性：
+//扩展属性,扩展属性不能在函数中定义
+val Kt.name: String
+    get() {
+        return "bkw"
+    }
+
+
+四、Lambda闭包语法
+
+
+
+
+五、高阶函数
+
+
+六、内联函数

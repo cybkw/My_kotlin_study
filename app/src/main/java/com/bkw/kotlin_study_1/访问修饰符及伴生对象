@@ -1,0 +1,50 @@
+一、访问修饰符
+
+private -- 被修饰表示都是该类私有的
+protected -- 表示这个类以及他的子类都可以访问
+public -- 表示所有其他的类都可以访问的到
+internal -- kotlin特有的，表示一个模块中的类都可以访问到这个对象，而跨模块的是访问不到的。
+
+internal修饰符应用场景:项目的结构化扩展。
+
+模块是什么？
+类似于一个module,在同一个module内的可以互相调用。
+如果你的变量名通过internal修饰，在同模块内就可以调用。
+
+
+在Java中，经常能看到一个类有一个静态方法，
+通过类名.方法就能调用这个方法。
+
+在kotlin中如何体现呢？
+两种方式，第一种：使用@JvmStatic注解
+
+第二种：使用conpanion object 伴生对象。
+    //伴生对象，一定要写在一个类的内部。
+    companion object {
+            fun sayM(){
+                println("xxx")
+            }
+    }
+
+//Kotlin调用伴生对象函数
+Test7.sayM()
+
+//Java调用kotlin类的伴生对象
+Test7.Companion.sayM();
+
+
+ 使用伴生对象声明一个单例（推荐）
+/**
+ * 使用伴生对象声明一个单例（推荐）
+ * */
+class Single private constructor() {
+    companion object {
+        fun get(): Single {
+            return Holder.instance;
+        }
+    }
+
+    private object Holder {
+        val instance = Single();
+    }
+}

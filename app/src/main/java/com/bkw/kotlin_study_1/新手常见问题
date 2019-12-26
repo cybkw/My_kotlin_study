@@ -1,0 +1,105 @@
+//////////////////////////////////////////////////////////
+新手使用Kotlin常碰到的问题：  course2
+
+一、Kotlin没有封装类的概念
+像Java封装类在kotlin中都会被转换为基本数据类型来调用。
+
+示例：
+如下Java类中两个putNumber方法如果转成kotlin，会认为是两个同名的方法
+，因为在kotlin中没有Integer这个类。
+public class A implements AInterface {
+
+    @Override
+    public void putNumber(int num) {
+        System.out.println("基本数据类型：int");
+    }
+
+    @Override
+    public void putNumber(Integer num) {
+        System.out.println("包装类：Integer");
+    }
+}
+
+在kotlin中调用：
+fun main(args: Array<String>) {
+    //在Kotlin中调用A类的方法
+    val a = A()
+    //调用a类的putNumber只会打印基本数据类型，因为在kotlin中没有Integer这个类。
+    a.putNumber(123)
+}
+
+问题：
+在kotlin中有什么办法去调用Integer对象呢？
+答：通过反射可以。
+
+
+
+二、kotlin空值敏感
+Java A类：
+public static String format(String str) {
+        return str.isEmpty() ? null : str;
+}
+
+在kotlin中调用：
+function1("")
+
+fun function1(str: String) {
+    //第一个为String! String感叹号这个类型只有在kotlin调用java时候编译器自己推断声明的，不能手动声明
+    //String!=""; 不能执行，非安全
+    val fm1 = A.format(str)
+
+    //不可变 ,运行这里会报错，因为我们传入的是空字符串，这个是不可为空
+    val fm2: String = A.format(str)
+
+    //可空的String类型。 空安全的，真正使用也安全
+    val fm3: String? = A.format(str)
+}
+
+
+三、Kotlin没有静态变量与静态方法
+kotlin没有static关键字。
+
+3.1 在kotlin中可以使用@JvmStatic注解来给函数设置静态方法
+object child {
+    //静态变量
+    @JvmField
+    var name: String = "bkw"
+
+    //只有类的命名对象和伴生对象中的成员才能用@JvmStatic
+    @JvmStatic
+    fun sayMsg() {
+        println("我是kotlin的静态方法")
+    }
+}
+
+以上代码被编译以后会变成以：public static 修饰。
+
+在Java中调用：
+child.name;
+child.sayMsg();
+
+3.2 Kotlin调用Java的静态变量/方法直接使用类名.变量的方式。
+
+
+练习题1：
+fun main(args: Array<String>) {
+    val age=18
+    val name="bkw"
+    println("我叫%d,我今年%d岁",name,age)  //编译时出错
+    println("我叫$name,今年$age" + "岁")  //正确用法
+}
+
+答：编译时出错，应该使用$变量名的方式引用
+
+练习题2:以下代码有什么问题？
+object Utils{
+    @JvmStatic
+    fun sayMsg(msg:String?){
+        println("$msg")
+    }
+}
+
+Java.java
+Utils.INSTANCE.sayMsg(null)
+
+答：运行不会有问题，但是可以不使用INSTANCE就能调用该方法。

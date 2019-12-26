@@ -1,0 +1,66 @@
+一、概念
+ 指一个函数的参数是函数或者一个Lambda的参数是函数，称为高阶函数。
+
+
+二、高阶函数的注意事项
+
+/**
+ * 这段代码表示：
+ * 如果isDebug为true,就打印日志
+ * */
+fun onlyif(isDebug: Boolean, block: () -> Unit) {
+    if (isDebug) block()
+}
+
+  /**
+     *
+     * 这段代码的意思，首先声明了一个runnable的对象。
+     * 同时，声明了一个参数为空，返回值为Unit的函数对象function。
+     * 然后将runnable对象的run方法赋值给了函数对象function。
+     *
+     * 并将这个函数作为参数传递给onlyif函数
+     * */
+    val runnable = Runnable {
+        println("Runnable :: run")
+    }
+    //函数是“一等公民”，可以直接使用对象::方法名来引用一个函数声明，
+    // 而不是直接对象.方法名的方式调用该方法
+    val function: () -> Unit
+    function=runnable::run
+
+    onlyif(true,function)
+
+三、用内联优化代码
+Kotlin的Lambda是一个匿名对象。
+
+可以使用inline修饰方法，这样当方法在编译时就会拆解方法的调用为语句调用，
+进而减少创建不必要的对象。
+
+在高阶函数fun前加一个 inline关键。如：
+inline fun onlyif(isDebug: Boolean, block: () -> Unit) {
+    if (isDebug) block()
+}
+
+注意：过度使用inline关键字，会增加编译器的负担，使用代码块变的很庞大。
+inline建议只配合高阶函数使用。
+
+以上代码编译后成为：
+/**
+ 可以看到，isDebug是方法block是否执行的条件。
+ Function0表示该方法没有参数。
+*/
+public static final void onlyif(boolean isDebug, @NotNull Function0 block) {
+      Intrinsics.checkParameterIsNotNull(block, "block");
+      if (isDebug) {
+         block.invoke();
+      }
+}
+
+public static final void main(String[] args){
+    boolean isDebug=true;
+    if(isDebug){
+        String str="打印日志"
+        System.out.println(str);
+    }
+}
+

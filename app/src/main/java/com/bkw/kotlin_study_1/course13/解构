@@ -1,0 +1,21 @@
+
+class User(var age: Int, var name: String) {
+    //函数名component是固定的,后面加数字
+    operator fun component1() = age
+    operator fun component2() = name
+}
+
+//解构
+fun main(args: Array<String>) {
+    val user = User(12, "bkw")
+    val (age, name) = user
+
+    println(age)
+    println(name)
+
+    val map1 = mapOf("key" to "bkw", "value" to "dad")
+
+    for ((k, v) in map1) {
+        println("$k-->$v")
+    }
+}

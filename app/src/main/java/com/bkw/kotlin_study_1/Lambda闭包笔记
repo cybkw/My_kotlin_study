@@ -1,0 +1,77 @@
+package course4
+
+kotlin Lambda语法
+
+一、语法特性：
+注意：
+-> 箭头前的表示闭包的参数，箭头后的表示闭包体（函数体）
+调用时与函数调用方式一样。
+Lambda闭包被编译后会变成一个匿名的内部对象。
+
+异常：
+Lambda的参数长度是有上限的，因为kotlin源码目前最多22个，达到23个就会报出“Function23”异常，
+可以通过自定义一个Function23的类添加，注意自定义的类不用放在package kotlin包下，
+所以开发者需要使用java来定义。
+
+
+//Kotlin Lambda语法
+    val thread = Thread({ -> Unit })
+    thread.start()
+
+//如果Lambda没有参数，可以省略箭头符号->
+    val thread2 = Thread({})
+    thread2.start()
+
+    //如果Lambda是函数的最后一个参数，可以将大括号放在小括号外面
+    val thread3 = Thread() {}
+    thread3.start()
+
+    //如果函数只有一个参数且这个参数是Lambda，则可以省略小括号
+    val thread4 = Thread {}
+    thread4.start()
+
+
+
+/**
+ * Lambda 闭包声明
+ * 如：打印一个字符串函数
+ * */
+val echo = { name: String ->
+    println(name)
+}
+
+/**
+ * 闭包声明
+ * 计算x+y的值
+ * */
+val com = { x: Int, y: Int ->
+    println(x + y)
+}
+
+/**
+ * 无参闭包
+ * */
+val me = { ->
+    println("me= my eye")
+}
+
+/**
+ * 定义一个比较测试的闭包
+ *
+ * */
+val test = if (5 > 3) {
+    println("yes")
+} else {
+    println("no")
+}
+
+/**
+ * 动态传参闭包,比较数字大小
+ * */
+val test2 = { v: Int ->
+    if (v > 5) {
+        println("$v" + "大于5")
+    } else {
+        println("$v" + "小于5")
+    }
+}

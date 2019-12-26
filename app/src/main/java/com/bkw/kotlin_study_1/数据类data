@@ -1,0 +1,9 @@
+数据类：
+相当于Java中的实体类，只需在class前加data关键字就可以，
+会默认实现getter()/setter()、toString()、hashCode()、equals()等方法。
+如下：
+
+data class User(var age: Int, var name: String)
+
+注意：数据类默认被加了public final修饰，
+所以它不能指定open关键字，也不能让非数据类去继承它。
